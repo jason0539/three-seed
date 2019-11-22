@@ -10,8 +10,10 @@
 import { WebGLRenderer, PerspectiveCamera, Scene, Vector3, AxisHelper } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import SeedScene from './objects/Scene.js';
+import GeometryLand from './GeometryLand/GeometryLand.js';
 import * as dat from 'dat.gui';
 import { GLOBAL_CONTROLS } from './globalControls.js';
+import { GLOBAL_SIGNALS } from './globalSignals.js';
 
 const gui = new dat.GUI();
 const scene = new Scene();
@@ -21,8 +23,15 @@ const seedScene = new SeedScene();
 const orbitControls = new OrbitControls(camera);
 const axisHelper = new AxisHelper(20);
 
+const geometryLand = new GeometryLand(scene);
+
+// scene control
 gui.add(GLOBAL_CONTROLS, 'showAxisHelper').onChange(function (value) {
   value ? scene.add(axisHelper) : scene.remove(axisHelper);
+});
+gui.add(GLOBAL_CONTROLS, 'showGeometryLand').onChange(function (value) {
+  GLOBAL_SIGNALS.addGeometryLand.dispatch(value);
+  value ? geometryLand.show() : geometryLand.hide();
 });
 
 // scene
@@ -30,6 +39,7 @@ scene.add(seedScene);
 
 //axis
 GLOBAL_CONTROLS.showAxisHelper && scene.add(axisHelper);
+GLOBAL_CONTROLS.showGeometryLand && scene.add(geometryLand);
 
 // camera
 camera.position.set(6, 3, -10);
