@@ -16,6 +16,7 @@
   },
   "dependencies": {
     "dat.gui": "^0.7.6",
+    "signals": "^1.0.0",
     "three": "^0.104.0",
     "three-obj-loader": "^1.1.3",
     "webpack-cli": "^3.3.2"
