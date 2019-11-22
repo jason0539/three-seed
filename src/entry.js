@@ -10,19 +10,26 @@
 import { WebGLRenderer, PerspectiveCamera, Scene, Vector3, AxisHelper } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import SeedScene from './objects/Scene.js';
+import * as dat from 'dat.gui';
+import { GLOBAL_CONTROLS } from './globalControls.js';
 
+const gui = new dat.GUI();
 const scene = new Scene();
 const camera = new PerspectiveCamera();
 const renderer = new WebGLRenderer({ antialias: true });
 const seedScene = new SeedScene();
 const orbitControls = new OrbitControls(camera);
-const axes = new AxisHelper(20);
+const axisHelper = new AxisHelper(20);
+
+gui.add(GLOBAL_CONTROLS, 'showAxisHelper').onChange(function (value) {
+  value ? scene.add(axisHelper) : scene.remove(axisHelper);
+});
 
 // scene
 scene.add(seedScene);
 
 //axis
-scene.add(axes);
+GLOBAL_CONTROLS.showAxisHelper && scene.add(axisHelper);
 
 // camera
 camera.position.set(6, 3, -10);
