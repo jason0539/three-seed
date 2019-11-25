@@ -16,6 +16,7 @@ class GeometryLandControl {
 
     constructor(geometryLand) {
         this.geometryLand = geometryLand;
+        this.cubeRotationSpeed = 0.01;
         this.rotationX = -0.5 * Math.PI;
         this.rotationY = -0.5 * Math.PI;
         this.rotationZ = -0.5 * Math.PI;
@@ -72,9 +73,9 @@ export default class GeometryLand extends Group {
 
         const planeGeometry = new PlaneGeometry(PLANE_SIDE_MAX, PLANE_SIDE_MAX, 1, 1);
         const planeMaterial = new MeshLambertMaterial({ color: 0xffffff, side: DoubleSide });
-        const plane = new Mesh(planeGeometry, planeMaterial);
-        plane.receiveShadow = true;
-        plane.rotation.x = 0.5 * Math.PI;
+        this.plane = new Mesh(planeGeometry, planeMaterial);
+        this.plane.receiveShadow = true;
+        this.plane.rotation.x = 0.5 * Math.PI;
 
         this.position.x = 0;
         this.position.y = PLANE_POSITION_Y;
@@ -98,11 +99,12 @@ export default class GeometryLand extends Group {
         gui.add(this.geometryLandControl, 'rotationZ', -1, 1).onChange((value) => {
             this.rotation.z = value * Math.PI;
         });
+        gui.add(this.geometryLandControl, 'cubeRotationSpeed', 0, 0.05);
         gui.add(this.geometryLandControl, 'addCube');
         gui.add(this.geometryLandControl, 'removeCube');
         gui.add(this.geometryLandControl, 'numberOfObjects').listen();
         show ? gui.show() : gui.hide();
-        this.add(plane);
+        this.add(this.plane);
     }
 
     show() {
@@ -117,5 +119,12 @@ export default class GeometryLand extends Group {
 
     update(timeStamp) {
         this.rotation.y = -timeStamp / 10000;
+        this.traverse((e) => {
+            if (e instanceof Mesh && e != this.plane) {
+                e.rotation.x += this.geometryLandControl.cubeRotationSpeed;
+                e.rotation.y += this.geometryLandControl.cubeRotationSpeed;
+                e.rotation.z += this.geometryLandControl.cubeRotationSpeed;
+            }
+        });
     }
 }
