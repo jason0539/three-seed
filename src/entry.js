@@ -7,7 +7,7 @@
  * 
  */
 
-import { WebGLRenderer, PerspectiveCamera, Scene, Vector3, AxisHelper } from 'three';
+import { WebGLRenderer, PerspectiveCamera, Scene, Vector3, AxisHelper,Fog } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 import SeedScene from './objects/Scene.js';
 import GeometryLand from './GeometryLand/GeometryLand.js';
@@ -33,6 +33,9 @@ gui.add(GLOBAL_CONTROLS, 'showGeometryLand').onChange(function (value) {
   GLOBAL_SIGNALS.addGeometryLand.dispatch(value);
   value ? geometryLand.show() : geometryLand.hide();
 });
+gui.add(GLOBAL_CONTROLS, 'hasFog').onChange(function (value) {
+  scene.fog = value ? new Fog(0xffffff, 0.015, 30) : undefined;
+})
 
 // scene
 scene.add(seedScene);
