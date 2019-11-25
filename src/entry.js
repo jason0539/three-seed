@@ -23,7 +23,7 @@ const seedScene = new SeedScene();
 const orbitControls = new OrbitControls(camera);
 const axisHelper = new AxisHelper(20);
 
-const geometryLand = new GeometryLand(scene);
+const geometryLand = new GeometryLand(scene, GLOBAL_CONTROLS.showGeometryLand);
 
 // scene control
 gui.add(GLOBAL_CONTROLS, 'showAxisHelper').onChange(function (value) {
@@ -54,6 +54,7 @@ const onAnimationFrameHandler = (timeStamp) => {
   orbitControls.update();
   renderer.render(scene, camera);
   seedScene.update && seedScene.update(timeStamp);
+  geometryLand && geometryLand.update && geometryLand.update(timeStamp);
   window.requestAnimationFrame(onAnimationFrameHandler);
 }
 window.requestAnimationFrame(onAnimationFrameHandler);
